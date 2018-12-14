@@ -5,7 +5,7 @@
 #### 1. Типы данных в JS. Приведение типов
 #### 2. Что такое hoisting?
 Hoisting (поднятие) - это механизм в JavaScript в котором переменные и объявления функций передвигаются вверх своей области видимости перед тем, как код будет выполнен. Это происходит, т.к. компиляция кода происходит в два прохода. При первом проходе компилятор получает все объявления переменных, все идентификаторы. При этом никакой код не выполняется, методы не вызываются. При втором проходе собственно происходит выполнение.
-- **_var_**
+- _var_
 ```javascript
 console.log(foo); //ReferenceError: foo is not defined
 ```
@@ -36,7 +36,7 @@ function hoist() {
 }
 hoist(); // Вывод: undefined
 ```
-- **_let_**
+- _let_
 ```javascript
 console.log(hoist); //ReferenceError: hoist is not defined
 let hoist = 'The variable has been hoisted.';
@@ -47,7 +47,7 @@ console.log(hoist); //undefined
 hoist = 'Hoisted'
 ```
 Переменные объявленные как let заключены в область видимости блока, а не функции.
-- **_const_**
+- _const_
 ```javascript
 console.log(hoist); //ReferenceError: hoist is not defined
 const hoist = 'The variable has been hoisted.';
@@ -58,7 +58,7 @@ console.log(PI); //SyntaxError: Missing initializer in const declaration
 PI=3.142;
 ```
 Переменные объявленные с let и const остаются неинициализированными в начале выполнения, в то время как переменные объявленные с var инициализируются со значением undefined.
-- **_function declaration_**
+- _function declaration_
 ```javascript
 display(); //"Hello Hoisting"
  
@@ -66,7 +66,7 @@ function display(){
     console.log("Hello Hoisting"); 
 }
 ```
-- **_function expression_**
+- _function expression_
 ```javascript
 display(); //TypeError: display is not a function.
  
@@ -74,7 +74,7 @@ var display = function (){
     console.log("Hello Hoisting"); 
 }
 ```
-- **_class declaration_** (не всплывает)
+- _class declaration_ (не всплывает)
 ```javascript
 var Frodo = new Hobbit();
 Frodo.height = 100;
@@ -87,7 +87,7 @@ class Hobbit {
   }
 }
 ```
-- **_class expression_** (не всплывает)
+- _class expression_ (не всплывает)
 ```javascript
 var Square = new Polygon();
 Square.height = 10;
@@ -104,7 +104,7 @@ constructor(height, width) {
 [read more ...](https://medium.com/@stasonmars/%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D0%BC%D1%81%D1%8F-%D1%81-%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%D0%BC-hoisting-%D0%B2-javascript-7d2d27bc51f1)
 #### 3. Let vs var. Const
 #### 4. Передача данных по ссылке и по значению. Примеры
-- **_Передача по значению_**
+- _Передача по значению_
 ```javascript
 function change(x){
   x = 2 * x;
@@ -117,7 +117,7 @@ change(n);                          // x in change: 20
 console.log("n after change:", n);  // n after change: 10
 ```
 Строки, числа, логические значения передаются в функцию по значению (передается их копия).
-- **_Передача по ссылке_**
+- _Передача по ссылке_
 ```javascript
 function change(user){
   user.name = "Tom";
