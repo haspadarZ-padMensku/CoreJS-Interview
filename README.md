@@ -5,7 +5,7 @@
 #### 1. Типы данных в JS. Приведение типов
 #### 2. Что такое hoisting?
 Hoisting (поднятие) - это механизм в JavaScript в котором переменные и объявления функций передвигаются вверх своей области видимости перед тем, как код будет выполнен. Это происходит, т.к. компиляция кода происходит в два прохода. При первом проходе компилятор получает все объявления переменных, все идентификаторы. При этом никакой код не выполняется, методы не вызываются. При втором проходе собственно происходит выполнение.
-- var
+- **_var_**
 ```javascript
 console.log(foo); //ReferenceError: foo is not defined
 ```
@@ -36,7 +36,7 @@ function hoist() {
 }
 hoist(); // Вывод: undefined
 ```
-- let
+- **_let_**
 ```javascript
 console.log(hoist); //ReferenceError: hoist is not defined
 let hoist = 'The variable has been hoisted.';
@@ -47,7 +47,7 @@ console.log(hoist); //undefined
 hoist = 'Hoisted'
 ```
 Переменные объявленные как let заключены в область видимости блока, а не функции.
-- const
+- **_const_**
 ```javascript
 console.log(hoist); //ReferenceError: hoist is not defined
 const hoist = 'The variable has been hoisted.';
@@ -58,7 +58,7 @@ console.log(PI); //SyntaxError: Missing initializer in const declaration
 PI=3.142;
 ```
 Переменные объявленные с let и const остаются неинициализированными в начале выполнения, в то время как переменные объявленные с var инициализируются со значением undefined.
-- function declaration
+- **_function declaration_**
 ```javascript
 display(); //"Hello Hoisting"
  
@@ -66,7 +66,7 @@ function display(){
     console.log("Hello Hoisting"); 
 }
 ```
-- function expression
+- **_function expression_**
 ```javascript
 display(); //TypeError: display is not a function.
  
@@ -74,7 +74,7 @@ var display = function (){
     console.log("Hello Hoisting"); 
 }
 ```
-- class declaration (не всплывает)
+- **_class declaration_** (не всплывает)
 ```javascript
 var Frodo = new Hobbit();
 Frodo.height = 100;
@@ -87,7 +87,7 @@ class Hobbit {
   }
 }
 ```
-- class expression (не всплывает)
+- **_class expression_** (не всплывает)
 ```javascript
 var Square = new Polygon();
 Square.height = 10;
@@ -104,6 +104,49 @@ constructor(height, width) {
 [read more ...](https://medium.com/@stasonmars/%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D0%B5%D0%BC%D1%81%D1%8F-%D1%81-%D0%BF%D0%BE%D0%B4%D0%BD%D1%8F%D1%82%D0%B8%D0%B5%D0%BC-hoisting-%D0%B2-javascript-7d2d27bc51f1)
 #### 3. Let vs var. Const
 #### 4. Передача данных по ссылке и по значению. Примеры
+- **_Передача по значению_**
+```javascript
+function change(x){
+  x = 2 * x;
+  console.log("x in change:", x);
+}
+ 
+let n = 10;
+console.log("n before change:", n); // n before change: 10
+change(n);                          // x in change: 20
+console.log("n after change:", n);  // n after change: 10
+```
+Строки, числа, логические значения передаются в функцию по значению (передается их копия).
+- **_Передача по ссылке_**
+```javascript
+function change(user){
+  user.name = "Tom";
+}
+ 
+var bob ={ 
+  name: "Bob"
+};
+console.log("before change:", bob.name);    // Bob
+change(bob);
+console.log("after change:", bob.name);     // Tom
+```
+Объекты и массивы передаются по ссылке. То есть функция получает сам объект или массив, а не их копию.
+```javascript
+function change(array){
+  array[0] = 8;
+}
+function changeFull(array){
+  array = [9, 8, 7];
+}
+ 
+var numbers = [1, 2, 3];
+ 
+console.log("before change:", numbers);     // [1, 2, 3]
+change(numbers);
+console.log("after change:", numbers);      // [8, 2, 3]
+changeFull(numbers);
+console.log("after changeFull:", numbers);  // [8, 2, 3]
+```
 #### 5. {a: 10} == {a: 10}. Что вернет код?
 #### 6. Что такое this?
 #### 7. Apply, call, bind. Для чего используются? В чем отличия?
