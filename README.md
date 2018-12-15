@@ -373,6 +373,23 @@ https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/this
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/this%20%26%20object%20prototypes
 #### 7. Apply, call, bind. Для чего используются? В чем отличия?
 #### 8. Замыкание. Приведите пример.
+Замыкание — это комбинация функции и лексического окружения, в котором эта функция была определена.
+```javascript
+function makeFunc() {
+  let name = "Mozilla";
+  function displayName() {
+    alert(name);
+  }
+  return displayName;
+};
+
+let myFunc = makeFunc();
+myFunc(); //Mozilla
+```
+Подробнее:
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Closures
+http://learn.javascript.ru/closures
+https://github.com/azat-io/you-dont-know-js-ru/tree/master/scope%20%26%20closures
 #### 9. Sum(1)(2)
 #### 10. Prototype. Отличия proto от prototype. Пример наследования
 #### 11. Как создать объект без прототипа?
