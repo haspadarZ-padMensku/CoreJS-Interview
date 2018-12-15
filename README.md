@@ -598,6 +598,22 @@ alert( result ); // 15
 ```
 При первом запуске sum – исходное значение, с которого начинаются вычисления, равно нулю (второй аргумент reduce).
 Сначала анонимная функция вызывается с этим начальным значением и первым элементом массива, результат запоминается и передаётся в следующий вызов, уже со вторым аргументом массива, затем новое значение участвует в вычислениях с третьим аргументом и так далее.
+
+Подробнее: 
+
+https://learn.javascript.ru/array-iteration
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/some
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 #### 13. “hello world”.repeating(3) -> hello world hello world hello world. Как реализовать?
 #### 14. Браузерные события элементов. Отмена дефолтных событий браузера
 #### 15. Всплытие и перехват событий
