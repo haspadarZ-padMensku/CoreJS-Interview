@@ -405,6 +405,93 @@ http://learn.javascript.ru/closures
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/scope%20%26%20closures
 #### 9. Sum(1)(2)
 #### 10. Prototype. Отличия proto от prototype. Пример наследования
+Объекты в JavaScript можно организовать в цепочки так, чтобы свойство, не найденное в одном объекте, автоматически искалось бы в другом.
+Связующим звеном выступает специальное свойство __proto__.
+Если один объект имеет специальную ссылку __proto__ на другой объект, то при чтении свойства из него, если свойство отсутствует в самом объекте, оно ищется в объекте __proto__.
+```javascript
+var animal = {
+  eats: true
+};
+var rabbit = {
+  jumps: true
+};
+
+rabbit.__proto__ = animal;
+
+// в rabbit можно найти оба свойства
+alert( rabbit.jumps ); // true
+alert( rabbit.eats ); // true
+```
+Объект, на который указывает ссылка __proto__, называется «прототипом». В данном случае получилось, что animal является прототипом для rabbit.
+У объекта, который является __proto__, может быть свой __proto__, у того – свой, и так далее. При этом свойства будут искаться по цепочке.
+__proto__ не работает в IE10.
+К счастью, в JavaScript с древнейших времён существует альтернативный, встроенный в язык и полностью кросс-браузерный способ.
+Чтобы новым объектам автоматически ставить прототип, конструктору ставится свойство prototype.
+При создании объекта через new, в его прототип __proto__ записывается ссылка из prototype функции-конструктора.
+Например, код ниже полностью аналогичен предыдущему, но работает всегда и везде:
+```javascript
+let animal = {
+  eats: true
+};
+
+function Rabbit(name) {
+  this.name = name;
+}
+
+Rabbit.prototype = animal;
+
+let rabbit = new Rabbit("Кроль"); //  rabbit.__proto__ == animal
+
+alert( rabbit.eats ); // true
+```
+Установка Rabbit.prototype = animal буквально говорит интерпретатору следующее: "При создании объекта через new Rabbit запиши ему __proto__ = animal".
+Свойство prototype имеет смысл только у конструктора
+Свойство с именем prototype можно указать на любом объекте, но особый смысл оно имеет, лишь если назначено функции-конструктору.
+Само по себе, без вызова оператора new, оно вообще ничего не делает, его единственное назначение – указывать __proto__ для новых объектов.
+Пример наследования:
+```javascript
+// 1. Конструктор Animal
+function Animal(name) {
+  this.name = name;
+  this.speed = 0;
+}
+
+// 1.1. Методы -- в прототип
+
+Animal.prototype.stop = function() {
+  this.speed = 0;
+  alert( this.name + ' стоит' );
+}
+
+Animal.prototype.run = function(speed) {
+  this.speed += speed;
+  alert( this.name + ' бежит, скорость ' + this.speed );
+};
+
+// 2. Конструктор Rabbit
+function Rabbit(name) {
+  this.name = name;
+  this.speed = 0;1
+}
+
+// 2.1. Наследование
+Rabbit.prototype = Object.create(Animal.prototype);
+Rabbit.prototype.constructor = Rabbit;
+
+// 2.2. Методы Rabbit
+Rabbit.prototype.jump = function() {
+  this.speed++;
+  alert( this.name + ' прыгает, скорость ' + this.speed );
+}
+```
+
+Подробнее:
+
+http://learn.javascript.ru/class-inheritance
+
+http://learn.javascript.ru/prototype
+
+http://learn.javascript.ru/new-prototype
 #### 11. Как создать объект без прототипа?
 #### 12. Методы массива, перебирающие элементы массива
 #### 13. “hello world”.repeating(3) -> hello world hello world hello world. Как реализовать?
