@@ -686,6 +686,12 @@ element.removeEventListener(event, handler[, phase]);
 * Основной способ – это воспользоваться объектом события. Для отмены действия браузера существует стандартный метод event.preventDefault().
 
 * Если же обработчик назначен через onсобытие (не через addEventListener), то можно просто вернуть false из обработчика.
+
+Подробнее: 
+
+https://learn.javascript.ru/introduction-browser-events#addeventlistener-i-removeeventlistener
+
+https://learn.javascript.ru/default-browser-action
 #### 15. Всплытие и перехват событий
 #### 16. Делегирование. Пример
 #### 17. Напишите функцию F, так чтобы new F === F
