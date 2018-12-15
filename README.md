@@ -281,6 +281,97 @@ console.log("after changeFull:", numbers);  // [8, 2, 3]
 ```
 #### 5. {a: 10} == {a: 10}. Что вернет код?
 #### 6. Что такое this?
+Для доступа к текущему объекту из метода используется ключевое слово this.
+Значением this является объект перед «точкой», в контексте которого вызван метод, например:
+```javascript
+let user = {
+  name: 'Василий',
+  sayHi: function() {
+    alert( this.name );
+  }
+};
+
+user.sayHi(); // sayHi в контексте user
+```
+Здесь при выполнении функции user.sayHi() в this будет храниться ссылка на текущий объект user.
+Вместо this внутри sayHi можно было бы обратиться к объекту, используя переменную user:
+```javascript
+  sayHi: function() {
+    alert( user.name );
+  }
+```
+…Однако, такое решение нестабильно. Если мы решим скопировать объект в другую переменную, например admin = user, а в переменную user записать что-то другое – обращение будет совсем не по адресу:
+```javascript
+let user = {
+  name: 'Василий',
+  sayHi: function() {
+    alert( user.name ); // приведёт к ошибке
+  }
+};
+
+let admin = user;
+user = null;
+
+admin.sayHi(); // упс! внутри sayHi обращение по старому имени, ошибка!
+```
+Использование this гарантирует, что функция работает именно с тем объектом, в контексте которого вызвана.
+Через this метод может не только обратиться к любому свойству объекта, но и передать куда-то ссылку на сам объект целиком:
+```javascript
+let user = {
+  name: 'Василий',
+  sayHi: function() {
+    showName(this); // передать текущий объект в showName
+  }
+};
+
+function showName(namedObj) {
+  alert( namedObj.name );
+}
+user.sayHi(); // Василий
+```
+Если одну и ту же функцию запускать в контексте разных объектов, она будет получать разный this:
+```javascript
+let user = { firstName: "Вася" };
+let admin = { firstName: "Админ" };
+
+function func() {
+  alert( this.firstName );
+}
+
+user.f = func;
+admin.g = func;
+
+// this равен объекту перед точкой:
+user.f(); // Вася
+admin.g(); // Админ
+admin['g'](); // Админ (не важно, доступ к объекту через точку или квадратные скобки)
+```
+Значение this, при вызове без контекста, получает значение глобального объекта window:
+
+```javascript
+ function func() {
+  alert( this ); // выведет [object Window] или [object global]
+}
+
+func();
+```
+Таково поведение в старом стандарте.
+А в режиме use strict вместо глобального объекта this будет undefined:
+```javascript
+ function func() {
+  "use strict";
+  alert( this ); // выведет undefined (кроме IE9-)
+}
+
+func();
+```
+Обычно если в функции используется this, то она, всё же, служит для вызова в контексте объекта, так что такая ситуация – скорее исключение.
+
+Подробнее:
+
+http://learn.javascript.ru/object-methods
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/this
+https://github.com/azat-io/you-dont-know-js-ru/tree/master/this%20%26%20object%20prototypes
 #### 7. Apply, call, bind. Для чего используются? В чем отличия?
 #### 8. Замыкание. Приведите пример.
 #### 9. Sum(1)(2)
