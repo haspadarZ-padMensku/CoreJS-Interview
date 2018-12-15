@@ -694,6 +694,47 @@ https://learn.javascript.ru/introduction-browser-events#addeventlistener-i-remov
 https://learn.javascript.ru/default-browser-action
 #### 15. Всплытие и перехват событий
 #### 16. Делегирование. Пример
+Всплытие событий позволяет реализовать один из самых важных приёмов разработки – делегирование.
+
+Он заключается в том, что если у нас есть много элементов, события на которых нужно обрабатывать похожим образом, то вместо того, чтобы назначать обработчик каждому – мы ставим один обработчик на их общего предка.
+Из него можно получить целевой элемент event.target, понять на каком именно потомке произошло событие и обработать его.
+```javascript
+<div id="menu">
+  <button data-action="save">Сохранить</button>
+  <button data-action="load">Загрузить</button>
+  <button data-action="search">Поиск</button>
+</div>
+
+<script>
+  function Menu(elem) {
+    this.save = function() {
+      alert( 'сохраняю' );
+    };
+    this.load = function() {
+      alert( 'загружаю' );
+    };
+    this.search = function() {
+      alert( 'ищу' );
+    };
+
+    let self = this;
+
+    elem.onclick = function(e) {
+      let target = e.target;
+      let action = target.getAttribute('data-action');
+      if (action) {
+        self[action]();
+      }
+    };
+  }
+
+  new Menu(menu);
+</script>
+```
+
+Подробнее:
+
+https://learn.javascript.ru/event-delegation
 #### 17. Напишите функцию F, так чтобы new F === F
 #### 18. Function.prototype.bind polyfill
 #### 19. Object.create polyfill
