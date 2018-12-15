@@ -368,7 +368,6 @@ func();
 Обычно если в функции используется this, то она, всё же, служит для вызова в контексте объекта, так что такая ситуация – скорее исключение.
 
 Подробнее:
-
 http://learn.javascript.ru/object-methods
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/this
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/this%20%26%20object%20prototypes
