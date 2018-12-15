@@ -387,8 +387,11 @@ let myFunc = makeFunc();
 myFunc(); //Mozilla
 ```
 Подробнее:
+
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Closures
+
 http://learn.javascript.ru/closures
+
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/scope%20%26%20closures
 #### 9. Sum(1)(2)
 #### 10. Prototype. Отличия proto от prototype. Пример наследования
