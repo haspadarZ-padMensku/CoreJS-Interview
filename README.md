@@ -998,4 +998,7 @@ https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Pr
 
 ## Additional Questions
 #### 22. Денормализация в ES6
+
+http://learn.javascript.ru/destructuring
+
 #### 23. Spread оператор (...)
