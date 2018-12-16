@@ -842,6 +842,43 @@ https://learn.javascript.ru/introduction-browser-events#addeventlistener-i-remov
 
 https://learn.javascript.ru/default-browser-action
 #### 15. Всплытие и перехват событий
+
+Основной принцип всплытия:
+
+При наступлении события обработчики сначала срабатывают на самом вложенном элементе, затем на его родителе, затем выше и так далее, вверх по цепочке вложенности.
+
+![](https://learn.javascript.ru/article/event-bubbling/event-order-bubbling.png)
+
+Самый глубокий элемент, который вызывает событие, называется «целевым» или «исходным» элементом и доступен как `event.target`.
+
+Для остановки всплытия нужно вызвать метод `event.stopPropagation()`.
+
+`stopPropagation` препятствует продвижению события дальше, но на текущем элементе все обработчики отработают.
+
+Для того, чтобы не только предотвратить всплытие, но и останавить обработку событий на текущем элементе используется метод `event.stopImmediatePropagation()`
+
+В современном стандарте, кроме "всплытия" событий, предусмотрено ещё и "погружение" (или "захват").
+
+![](https://mdn.mozillademos.org/files/14075/bubbling-capturing.png)
+
+Откройте данный пример: 
+
+[исходный код](https://github.com/mdn/learning-area/blob/master/javascript/building-blocks/events/show-video-box.html)
+
+[пример](http://mdn.github.io/learning-area/javascript/building-blocks/events/show-video-box.html)
+
+```javascript
+video.onclick = function(e) {
+  e.stopPropagation();
+  video.play();
+};
+```
+Подробнее:
+
+[developer.mozilla.org](https://developer.mozilla.org/ru/docs/Learn/JavaScript/Building_blocks/%D0%A1%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F#%D0%92%D1%81%D0%BF%D0%BB%D1%8B%D1%82%D0%B8%D0%B5_%D0%B8_%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%B2%D0%B0%D1%82_%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D0%B9)
+
+https://learn.javascript.ru/event-bubbling
+
 #### 16. Делегирование. Пример
 Всплытие событий позволяет реализовать один из самых важных приёмов разработки – делегирование.
 
