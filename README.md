@@ -382,6 +382,76 @@ http://learn.javascript.ru/object-methods
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/this
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/this%20%26%20object%20prototypes
 #### 7. Apply, call, bind. Для чего используются? В чем отличия?
+- _call_
+
+Метод call() вызывает функцию с указанным значением this и индивидуально предоставленными аргументами. Вы можете присваивать различные объекты this при вызове существующей функции. this ссылается на текущий объект, вызвавший объект. С помощью call вы можете написать метод один раз, а затем наследовать его в других объектах, без необходимости переписывать метод для каждого нового объекта.
+
+```javascript
+function showFullName() {
+  alert( this.firstName + " " + this.lastName );
+}
+
+const user = {
+  firstName: "Василий",
+  lastName: "Петров"
+};
+
+// функция вызовется с this=user
+showFullName.call(user) // "Василий Петров"
+```
+- _apply_
+
+Метод apply() вызывает функцию с указанным значением this и аргументами, предоставленными в виде массива (либо массивоподобного объекта). Вы можете присваивать различные объекты this при вызове существующей функции. this ссылается на текущий объект, вызывающий объект. С помощью apply() вы можете написать метод один раз, а затем наследовать его в других объектах без необходимости переписывать метод для каждого нового объекта.
+
+```javascript
+//эти две строчки сработают одинаково:
+showFullName.call(user, 'firstName', 'surname');
+showFullName.apply(user, ['firstName', 'surname']);
+```
+```javascript
+var arr = [];
+arr.push(1);
+arr.push(5);
+arr.push(2);
+
+// получить максимум из элементов arr
+alert( Math.max.apply(null, arr) ); // 5
+```
+Преимущество apply() перед call() отчётливо видно, когда мы формируем массив аргументов динамически.
+- _bind_
+
+Метод bind() создаёт новую функцию, которая при вызове устанавливает в качестве контекста выполнения this предоставленное значение. В метод также передаётся набор аргументов, которые будут установлены перед переданными в привязанную функцию аргументами при её вызове.
+
+```javascript
+// Пример потери контекста
+var user = {
+  firstName: "Вася",
+  sayHi: function() {
+    alert( this.firstName );
+  }
+};
+
+setTimeout(user.sayHi, 1000); // undefined (не Вася!)
+```
+```javascript
+// привязка контекста
+var user = {
+  firstName: "Вася",
+  sayHi: function() {
+    alert( this.firstName );
+  }
+};
+
+setTimeout(user.sayHi.bind(user), 1000); // Вася
+```
+Вызов bind часто используют для привязки функции к контексту, чтобы затем присвоить её в обычную переменную и вызывать уже без явного указания объекта.
+- фундаментальное различие между этими методами заключается в том, что функция call() принимает список аргументов, в то время, как функция apply() - одиночный массив аргументов. Методы call/apply вызывают функцию с заданным контекстом и аргументами. А bind не вызывает функцию. Он только возвращает «обёртку», которую мы можем вызвать позже, и которая передаст вызов в исходную функцию, с привязанным контекстом.
+
+Подробнее:
+
+https://learn.javascript.ru/call-apply
+
+https://learn.javascript.ru/bind
 #### 8. Замыкание. Приведите пример.
 Замыкание — это комбинация функции и лексического окружения, в котором эта функция была определена.
 ```javascript
@@ -404,6 +474,48 @@ http://learn.javascript.ru/closures
 
 https://github.com/azat-io/you-dont-know-js-ru/tree/master/scope%20%26%20closures
 #### 9. Sum(1)(2)
+
+1 способ
+
+```javascript
+function sum (a) {
+  return function (b) {
+    return a + b;
+  }
+};
+
+sum(2)(3) //5
+
+// раблотаеет только с 2 скобками
+```
+
+2 способ
+
+```javascript
+function sum(a) {
+
+  var currentSum = a;
+
+  function f(b) {
+    currentSum += b;
+    return f;
+  }
+
+  f.toString = function() {
+    return currentSum;
+  };
+
+  return f;
+}
+
+sum(1)(2); // 3
+sum(5)(-1)(2); // 6
+```
+
+Подробнее:
+
+https://learn.javascript.ru/task/sum-many-brackets
+
 #### 10. Prototype. Отличия proto от prototype. Пример наследования
 #### 11. Как создать объект без прототипа?
 #### 12. Методы массива, перебирающие элементы массива
@@ -416,3 +528,7 @@ https://github.com/azat-io/you-dont-know-js-ru/tree/master/scope%20%26%20closure
 #### 19. Object.create polyfill
 #### 20. Event loop
 #### 21. Promises
+
+## Additional Questions
+#### 22. Денормализация в ES6
+#### 23. Spread оператор (...)
