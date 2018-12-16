@@ -943,6 +943,7 @@ if (!Function.prototype.bind) {
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 #### 19. Object.create polyfill
 #### 20. Event loop
+https://developer.mozilla.org/ru/docs/Web/JavaScript/EventLoop
 #### 21. Promises
 
 ## Additional Questions
