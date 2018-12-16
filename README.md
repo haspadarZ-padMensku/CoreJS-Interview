@@ -922,6 +922,37 @@ https://learn.javascript.ru/event-bubbling
 
 https://learn.javascript.ru/event-delegation
 #### 17. Напишите функцию F, так чтобы new F === F
+```javascript
+function F() { return F; }
+```
+
+В данном случае чтобы обеспечить равенство, мы явно задаем `return`, поэтому объект не создается, а `new` отрабатывает просто как функция.
+
+_О `this` and `return`:_
+
+Как правило, конструкторы ничего не возвращают. Их задача – записать всё, что нужно, в `this`, который автоматически станет результатом.
+
+Но если явный вызов return всё же есть, то применяется простое правило:
+
+- При вызове `return` с объектом, будет возвращён он, а не `this`.
+- При вызове `return` с примитивным значением, оно будет отброшено.
+
+Иными словами, вызов `return` с объектом вернёт объект, а с чем угодно, кроме объекта – возвратит, как обычно, `this`.
+
+```javascript
+function Animal(name) {
+  // this = {}; это делает интерпритатор
+
+  // в this пишем свойства, методы
+  this.name = name;
+  this.canWalk = true;
+
+  // return this; это делает интерпритатор
+}
+```
+Подробнее:
+
+https://learn.javascript.ru/constructor-new
 #### 18. Function.prototype.bind polyfill
 ```javascript
 if (!Function.prototype.bind) {
@@ -942,9 +973,28 @@ if (!Function.prototype.bind) {
 
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 #### 19. Object.create polyfill
+
+See here: [developer.mozilla.org](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Polyfill)
+
 #### 20. Event loop
 https://developer.mozilla.org/ru/docs/Web/JavaScript/EventLoop
 #### 21. Promises
+
+Для того чтобы поиграться с запросами, можно использовать открытый API http://jsonplaceholder.typicode.com/
+
+Объект Promise (обещание) используется для отложенных и асинхронных вычислений. Promise может находиться в трёх состояниях:
+
+- ожидание (pending): начальное состояние, не выполнено и не отклонено.
+- выполнено (fulfilled): операция завершена успешно.
+- отклонено (rejected): операция завершена с ошибкой.
+
+```javascript
+new Promise(executor);
+new Promise(function(resolve, reject) { ... });
+```
+
+https://learn.javascript.ru/promise
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
 ## Additional Questions
 #### 22. Денормализация в ES6
