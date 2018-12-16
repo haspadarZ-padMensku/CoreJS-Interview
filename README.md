@@ -517,14 +517,356 @@ sum(5)(-1)(2); // 6
 https://learn.javascript.ru/task/sum-many-brackets
 
 #### 10. Prototype. Отличия proto от prototype. Пример наследования
+Объекты в JavaScript можно организовать в цепочки так, чтобы свойство, не найденное в одном объекте, автоматически искалось бы в другом.
+Связующим звеном выступает специальное свойство __proto__.
+Если один объект имеет специальную ссылку __proto__ на другой объект, то при чтении свойства из него, если свойство отсутствует в самом объекте, оно ищется в объекте __proto__.
+```javascript
+var animal = {
+  eats: true
+};
+var rabbit = {
+  jumps: true
+};
+
+rabbit.__proto__ = animal;
+
+// в rabbit можно найти оба свойства
+alert( rabbit.jumps ); // true
+alert( rabbit.eats ); // true
+```
+Объект, на который указывает ссылка __proto__, называется «прототипом». В данном случае получилось, что animal является прототипом для rabbit.
+У объекта, который является __proto__, может быть свой __proto__, у того – свой, и так далее. При этом свойства будут искаться по цепочке.
+__proto__ не работает в IE10.
+К счастью, в JavaScript с древнейших времён существует альтернативный, встроенный в язык и полностью кросс-браузерный способ.
+Чтобы новым объектам автоматически ставить прототип, конструктору ставится свойство prototype.
+При создании объекта через new, в его прототип __proto__ записывается ссылка из prototype функции-конструктора.
+
+Например, код ниже полностью аналогичен предыдущему, но работает всегда и везде:
+```javascript
+let animal = {
+  eats: true
+};
+
+function Rabbit(name) {
+  this.name = name;
+}
+
+Rabbit.prototype = animal;
+
+let rabbit = new Rabbit("Кроль"); //  rabbit.__proto__ == animal
+
+alert( rabbit.eats ); // true
+```
+Установка Rabbit.prototype = animal буквально говорит интерпретатору следующее: "При создании объекта через new Rabbit запиши ему __proto__ = animal".
+Свойство prototype имеет смысл только у конструктора
+Свойство с именем prototype можно указать на любом объекте, но особый смысл оно имеет, лишь если назначено функции-конструктору.
+Само по себе, без вызова оператора new, оно вообще ничего не делает, его единственное назначение – указывать __proto__ для новых объектов.
+
+Пример наследования:
+```javascript
+// 1. Конструктор Animal
+function Animal(name) {
+  this.name = name;
+  this.speed = 0;
+}
+
+// 1.1. Методы -- в прототип
+
+Animal.prototype.stop = function() {
+  this.speed = 0;
+  alert( this.name + ' стоит' );
+}
+
+Animal.prototype.run = function(speed) {
+  this.speed += speed;
+  alert( this.name + ' бежит, скорость ' + this.speed );
+};
+
+// 2. Конструктор Rabbit
+function Rabbit(name) {
+  this.name = name;
+  this.speed = 0;1
+}
+
+// 2.1. Наследование
+Rabbit.prototype = Object.create(Animal.prototype);
+Rabbit.prototype.constructor = Rabbit;
+
+// 2.2. Методы Rabbit
+Rabbit.prototype.jump = function() {
+  this.speed++;
+  alert( this.name + ' прыгает, скорость ' + this.speed );
+}
+```
+
+Подробнее:
+
+http://learn.javascript.ru/class-inheritance
+
+http://learn.javascript.ru/prototype
+
+http://learn.javascript.ru/new-prototype
 #### 11. Как создать объект без прототипа?
 #### 12. Методы массива, перебирающие элементы массива
+- _forEach_
+Метод «Array.prototype.forEach(callback[, thisArg])» используется для перебора массива.
+Он для каждого элемента массива вызывает функцию callback.
+Этой функции он передаёт три параметра callback(item, i, arr):
+
+item – очередной элемент массива.
+
+i – его номер.
+
+arr – массив, который перебирается.
+
+Например:
+```javascript
+let arr = ["Яблоко", "Апельсин", "Груша"];
+
+arr.forEach(function(item, i, arr) {
+  alert( i + ": " + item + " (массив:" + arr + ")" );
+});
+```
+Второй, необязательный аргумент forEach позволяет указать контекст this для callback.
+Метод forEach ничего не возвращает, его используют только для перебора, как более «элегантный» вариант, чем обычный цикл for.
+
+- _filter_
+Метод «Array.prototype.filter(callback[, thisArg])» используется для фильтрации массива через функцию.
+Он создаёт новый массив, в который войдут только те элементы arr, для которых вызов callback(item, i, arr) возвратит true.
+
+Например:
+```javascript
+let arr = [1, -1, 2, -2, 3];
+
+let positiveArr = arr.filter(function(number) {
+  return number > 0;
+});
+
+alert( positiveArr ); // 1,2,3
+```
+
+- _map_
+Метод «Array.prototype.map(callback[, thisArg])» используется для трансформации массива.
+Он создаёт новый массив, который будет состоять из результатов вызова callback(item, i, arr) для каждого элемента arr.
+
+Например:
+```javascript
+let names = ['HTML', 'CSS', 'JavaScript'];
+
+let nameLengths = names.map(function(name) {
+  return name.length;
+});
+
+// получили массив с длинами
+alert( nameLengths ); // 4,3,10
+```
+
+- _every/some_
+
+Эти методы используются для проверки массива.
+
+Метод «Array.prototype.every(callback[, thisArg])» возвращает true, если вызов callback вернёт true для каждого элемента arr.
+Метод «Array.prototype.some(callback[, thisArg])» возвращает true, если вызов callback вернёт true для какого-нибудь элемента arr.
+```javascript
+let arr = [1, -1, 2, -2, 3];
+
+function isPositive(number) {
+  return number > 0;
+}
+
+alert( arr.every(isPositive) ); // false, не все положительные
+alert( arr.some(isPositive) ); // true, есть хоть одно положительное
+```
+
+- _reduce/reduceRight_
+
+Метод «Array.prototype.reduce(callback[, initialValue])» используется для последовательной обработки каждого элемента массива с сохранением промежуточного результата.
+Метод reduce используется для вычисления на основе массива какого-либо единого значения, иначе говорят «для свёртки массива». Чуть далее мы разберём пример для вычисления суммы.
+Он применяет функцию callback по очереди к каждому элементу массива слева направо, сохраняя при этом промежуточный результат.
+
+Аргументы функции callback(previousValue, currentItem, index, arr):
+
+previousValue – последний результат вызова функции, он же «промежуточный результат».
+currentItem – текущий элемент массива, элементы перебираются по очереди слева-направо.
+
+index – номер текущего элемента.
+
+arr – обрабатываемый массив.
+
+Кроме callback, методу можно передать «начальное значение» – аргумент initialValue. Если он есть, то на первом вызове значение previousValue будет равно initialValue, а если у reduce нет второго аргумента, то оно равно первому элементу массива, а перебор начинается со второго.
+
+Пример:
+
+```javascript
+let arr = [1, 2, 3, 4, 5]
+
+// для каждого элемента массива запустить функцию,
+// промежуточный результат передавать первым аргументом далее
+let result = arr.reduce(function(sum, current) {
+  return sum + current;
+}, 0);
+
+alert( result ); // 15
+```
+При первом запуске sum – исходное значение, с которого начинаются вычисления, равно нулю (второй аргумент reduce).
+Сначала анонимная функция вызывается с этим начальным значением и первым элементом массива, результат запоминается и передаётся в следующий вызов, уже со вторым аргументом массива, затем новое значение участвует в вычислениях с третьим аргументом и так далее.
+
+Подробнее: 
+
+https://learn.javascript.ru/array-iteration
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/some
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 #### 13. “hello world”.repeating(3) -> hello world hello world hello world. Как реализовать?
 #### 14. Браузерные события элементов. Отмена дефолтных событий браузера
+Событие – это сигнал от браузера о том, что что-то произошло.
+Список самых часто используемых событий:
+
+##### События мыши:
+* click – происходит, когда кликнули на элемент левой кнопкой мыши
+* contextmenu – происходит, когда кликнули на элемент правой кнопкой мыши
+* mouseover – возникает, когда на элемент наводится мышь
+* mousedown и mouseup – когда кнопку мыши нажали или отжали
+* mousemove – при движении мыши
+
+##### События на элементах управления:
+* submit – посетитель отправил форму <form>
+* focus – посетитель фокусируется на элементе, например нажимает на <input>
+
+##### Клавиатурные события:
+* keydown – когда посетитель нажимает клавишу
+* keyup – когда посетитель отпускает клавишу
+
+##### События документа:
+* DOMContentLoaded – когда HTML загружен и обработан, DOM документа полностью построен и доступен.
+
+##### События CSS:
+* transitionend – когда CSS-анимация завершена.
+
+Назначение обработчиков событий:
+Использование атрибута HTML
+```html
+<input value="Нажми меня" onclick="alert('Клик!')" type="button">
+```
+Использование свойства DOM-объекта
+```html
+<input id="elem" type="button" value="Нажми меня" />
+<script>
+  elem.onclick = function() {
+    alert( 'Спасибо' );
+  };
+</script>
+```
+
+##### addEventListener и removeEventListener
+Методы addEventListener и removeEventListener являются современным способом назначить или удалить обработчик, и при этом позволяют использовать сколько угодно любых обработчиков.
+Назначение обработчика осуществляется вызовом addEventListener с тремя аргументами:
+
+element.addEventListener(event, handler[, phase]);
+
+event - Имя события, например click
+
+handler - Ссылка на функцию, которую надо поставить обработчиком.
+
+phase - Необязательный аргумент, «фаза», на которой обработчик должен сработать.
+
+Удаление обработчика осуществляется вызовом removeEventListener:
+```javascript
+// передать те же аргументы, что были у addEventListener
+element.removeEventListener(event, handler[, phase]);
+```
+
+Удаление требует именно ту же функцию
+Многие события автоматически влекут за собой действие браузера.
+Например:
+
+- Клик по ссылке инициирует переход на новый URL.
+- Нажатие на кнопку «отправить» в форме – отсылку ее на сервер.
+- Двойной клик на тексте – инициирует его выделение.
+
+Есть два способа отменить действие браузера:
+
+* Основной способ – это воспользоваться объектом события. Для отмены действия браузера существует стандартный метод event.preventDefault().
+
+* Если же обработчик назначен через onсобытие (не через addEventListener), то можно просто вернуть false из обработчика.
+
+Подробнее: 
+
+https://learn.javascript.ru/introduction-browser-events#addeventlistener-i-removeeventlistener
+
+https://learn.javascript.ru/default-browser-action
 #### 15. Всплытие и перехват событий
 #### 16. Делегирование. Пример
+Всплытие событий позволяет реализовать один из самых важных приёмов разработки – делегирование.
+
+Он заключается в том, что если у нас есть много элементов, события на которых нужно обрабатывать похожим образом, то вместо того, чтобы назначать обработчик каждому – мы ставим один обработчик на их общего предка.
+Из него можно получить целевой элемент event.target, понять на каком именно потомке произошло событие и обработать его.
+```javascript
+<div id="menu">
+  <button data-action="save">Сохранить</button>
+  <button data-action="load">Загрузить</button>
+  <button data-action="search">Поиск</button>
+</div>
+
+<script>
+  function Menu(elem) {
+    this.save = function() {
+      alert( 'сохраняю' );
+    };
+    this.load = function() {
+      alert( 'загружаю' );
+    };
+    this.search = function() {
+      alert( 'ищу' );
+    };
+
+    let self = this;
+
+    elem.onclick = function(e) {
+      let target = e.target;
+      let action = target.getAttribute('data-action');
+      if (action) {
+        self[action]();
+      }
+    };
+  }
+
+  new Menu(menu);
+</script>
+```
+
+Подробнее:
+
+https://learn.javascript.ru/event-delegation
 #### 17. Напишите функцию F, так чтобы new F === F
 #### 18. Function.prototype.bind polyfill
+```javascript
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (context /* ...args */) {
+    var fn = this;
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    if (typeof(fn) !== 'function') {
+      throw new TypeError('Function.prototype.bind - context must be a valid function');
+    }
+
+    return function () {
+      return fn.apply(context, args.concat(Array.prototype.slice.call(arguments)));
+    };
+  };
+}
+```
+
+https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 #### 19. Object.create polyfill
 #### 20. Event loop
 #### 21. Promises
