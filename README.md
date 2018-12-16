@@ -607,6 +607,21 @@ http://learn.javascript.ru/prototype
 
 http://learn.javascript.ru/new-prototype
 #### 11. Как создать объект без прототипа?
+
+```javascript
+const data = Object.create(null);
+data.text = "Привет";
+
+alert(data.text); // Привет
+alert(data.toString); // undefined
+```
+
+Объект, создаваемый при помощи Object.create(null) не имеет прототипа, а значит в нём нет лишних свойств. 
+
+Подробнее: 
+
+https://learn.javascript.ru/prototype#object-create-null
+
 #### 12. Методы массива, перебирающие элементы массива
 - _forEach_
 Метод «Array.prototype.forEach(callback[, thisArg])» используется для перебора массива.
@@ -727,6 +742,28 @@ https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Ar
 
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 #### 13. “hello world”.repeating(3) -> hello world hello world hello world. Как реализовать?
+
+1 способ
+
+```javascript
+// cheat =)
+String.prototype.repeating = String.prototype.repeat;
+'hello world'.repeating(3);
+```
+
+2 способ
+
+```javascript
+String.prototype.repeating = function (count) {
+  var str = '' + this;
+  count = +count;
+  var rpt = '';
+  for (var i = 0; i < count; i++) {
+    rpt = rpt + ' ' + str;
+  }
+  return rpt;
+}
+```
 #### 14. Браузерные события элементов. Отмена дефолтных событий браузера
 Событие – это сигнал от браузера о том, что что-то произошло.
 Список самых часто используемых событий:
