@@ -948,4 +948,7 @@ https://developer.mozilla.org/ru/docs/Web/JavaScript/EventLoop
 
 ## Additional Questions
 #### 22. Денормализация в ES6
+
+http://learn.javascript.ru/destructuring
+
 #### 23. Spread оператор (...)
